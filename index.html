@@ -2,79 +2,254 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahadev Matka - App Download</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MAHADEV MATKA - VIP Predictions</title>
+    <meta name="description" content="Expert backed Matka predictions, fast results, and VIP guessing.">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        darkBg: '#050505',
-                        cardBg: '#111111',
-                        cardBorder: '#222222',
-                        brandYellow: '#e5ff00',
-                        textMuted: '#9ca3af',
-                    },
-                    boxShadow: {
-                        'glow-yellow': '0 0 30px rgba(229, 255, 0, 0.3)',
-                        'logo-glow': '0 0 25px rgba(229, 255, 0, 0.4)',
-                    }
-                }
-            }
-        }
-    </script>
-
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            /* Updated to Saffron/Gold theme for Mahadev */
+            --brand-primary: #ff9933; 
+            --brand-primary-hover: #e68a00;
+            --brand-primary-glow: rgba(255, 153, 51, 0.5);
+            --brand-secondary: #ff3333;
+            --bg-body: #0a0b10;
+            --bg-container: rgba(15, 17, 26, 0.75);
+            --bg-card: rgba(25, 28, 40, 0.6);
+        }
+
         body {
-            background-color: #050505;
-            color: white;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            min-height: 100dvh; /* FIX: Perfect fit for mobile browsers with bottom URL bars */
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            /* Added for ultra-smooth mobile app-like scrolling */
+            overscroll-behavior-y: none;
+            scroll-behavior: smooth;
         }
-        /* Custom Background Glows - Fixed with viewport bounds */
-        .bg-glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(229,255,0,0.15) 0%, rgba(5,5,5,0) 70%);
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
+
+        /* Canvas Background */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 30%, #1a1525 0%, #050608 90%);
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 460px;
+            background-color: var(--bg-container);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            min-height: 100vh;
+            min-height: 100dvh; /* FIX: Dynamic height for iOS/Android */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            border-left: 1px solid rgba(255,153,51,0.05);
+            border-right: 1px solid rgba(255,153,51,0.05);
             z-index: 1;
-            border-radius: 50%;
-            pointer-events: none;
         }
-        .bg-glow-purple {
+
+        .profile-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .profile-glow-bg {
             position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(5,5,5,0) 70%);
-            bottom: -300px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, var(--brand-primary-glow) 0%, transparent 70%);
+            z-index: -1;
             border-radius: 50%;
-            pointer-events: none;
+            filter: blur(20px);
+            animation: pulse-glow 3.5s infinite alternate ease-in-out;
+            /* Added hardware acceleration for smooth glowing */
+            will-change: transform, opacity;
         }
-        /* Image Logo Style */
-        .logo-image {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 3px solid #e5ff00;
-            object-fit: cover;
-            background: #000;
-            box-shadow: 0 0 30px rgba(229, 255, 0, 0.45);
-            transition: transform 0.3s ease;
+
+        .profile-image-wrapper {
+            border: 2px solid rgba(255, 153, 51, 0.8);
+            border-radius: 50%; /* Changed to circle for a more classic emblem look */
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.9);
+            background-color: #050608;
+            padding: 10px;
         }
-        .logo-image:hover {
-            transform: scale(1.05);
+
+        @keyframes pulse-glow {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.95); }
+            100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        .name-text {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(to right, #ffffff 10%, #ffe6cc 50%, var(--brand-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(255, 153, 51, 0.3);
+            letter-spacing: 0.05em;
+        }
+
+        .feature-item {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-left: 4px solid var(--brand-primary);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            margin-bottom: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-item:hover {
+            transform: translateX(8px);
+            background-color: rgba(35, 38, 50, 0.9);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5), -2px 0 15px var(--brand-primary-glow);
+            border-left-color: #ffb84d;
+        }
+
+        .feature-icon-dot {
+            color: var(--brand-primary);
+            text-shadow: 0 0 12px var(--brand-primary);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ffb84d 0%, #ff9933 50%, #cc7a00 100%);
+            background-size: 200% auto;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                0 0 0 0 rgba(255, 153, 51, 0.7), 
+                0 10px 25px rgba(0,0,0,0.5), 
+                inset 0 2px 0 rgba(255,255,255,0.4);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 204, 153, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            animation: pulse-button 2.5s infinite;
+            outline: none;
+            /* Added for smoother rendering on iOS/Safari */
+            -webkit-appearance: none;
+            appearance: none;
+            transform: translateZ(0); 
+            text-decoration: none; /* FIX: Keep text clean for anchor tags */
+            -webkit-user-select: none; /* FIX: Prevent accidental text selection on double tap */
+            user-select: none;
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            /* Switched from 'left' to 'transform' for 60FPS GPU smooth animation */
+            transform: translateX(-150%) skewX(-25deg);
+            animation: shimmer 3s infinite;
+            will-change: transform;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) skewX(-25deg); }
+            20% { transform: translateX(250%) skewX(-25deg); }
+            100% { transform: translateX(250%) skewX(-25deg); }
+        }
+
+        @keyframes pulse-button {
+            0% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.6), 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(255, 153, 51, 0), 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 153, 51, 0), 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            background-position: right center;
+            box-shadow: 
+                0 15px 35px rgba(255, 153, 51, 0.6), 
+                inset 0 2px 0 rgba(255,255,255,0.6);
+            animation: none;
+        }
+
+        .cta-button:hover span {
+            letter-spacing: 0.16em;
+        }
+        
+        .cta-button:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6), inset 0 4px 6px rgba(0,0,0,0.4);
+        }
+
+        .cta-icon {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cta-button:hover .cta-icon {
+            transform: translateX(6px) translateY(-6px) scale(1.15) rotate(10deg);
+        }
+
+        .footer-logo svg {
+            color: rgba(255,255,255,0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-logo:hover svg {
+            color: var(--brand-primary);
+            transform: scale(1.1);
+        }
+
+        .footer-link {
+            color: #888;
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--brand-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
         }
     </style>
 
@@ -88,114 +263,157 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1636585950741162');
+    fbq('init', '1666783097951017'); 
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1636585950741162&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=1666783097951017&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
-
 </head>
-<body class="antialiased min-h-screen bg-darkBg relative font-sans">
-    
-    <!-- Wrapper to strictly clip extra bottom spaces caused by gradients -->
-    <div class="relative min-h-screen overflow-hidden w-full flex flex-col items-center justify-center py-10">
-        
-        <!-- Ambient Background Glows inside container -->
-        <div class="bg-glow"></div>
-        <div class="bg-glow-purple"></div>
+<body>
+    <div id="background-canvas"></div>
 
-        <div class="max-w-4xl w-full mx-auto px-4 flex flex-col items-center relative z-10">
+    <div class="app-container px-6 py-12 overflow-y-auto">
+        
+        <div class="flex-grow flex flex-col items-center w-full">
             
-            <!-- Logo Section with Premium Golden 'B' Logo -->
-            <div class="mb-6 flex justify-center">
-                <img src="watermarked_img_1819214572267359626.png" alt="Mahadev Matka Logo" class="logo-image" onerror="this.src='https://placehold.co/140x140/000000/e5ff00?text=Mahadev'">
+            <!-- Modern Mahadev Trishul SVG Logo -->
+            <div class="profile-container mb-8">
+                <div class="profile-glow-bg"></div>
+                <div class="w-36 h-36 md:w-44 md:h-44 profile-image-wrapper relative flex items-center justify-center">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffb84d" />
+                                <stop offset="50%" stop-color="#ff9933" />
+                                <stop offset="100%" stop-color="#cc7a00" />
+                            </linearGradient>
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="8" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+                        <!-- Background Circle for Contrast -->
+                        <circle cx="200" cy="200" r="190" fill="#111" />
+                        
+                        <!-- Trishul (Trident) Core Design -->
+                        <g filter="url(#glow)">
+                            <!-- Center Spear Base/Handle -->
+                            <rect x="190" y="150" width="20" height="200" fill="url(#logoGrad)" rx="5" />
+                            
+                            <!-- Center Spear Tip -->
+                            <polygon points="200,60 175,160 225,160" fill="url(#logoGrad)" />
+                            
+                            <!-- U-Shape curve -->
+                            <path d="M 110,170 C 110,280 290,280 290,170" fill="none" stroke="url(#logoGrad)" stroke-width="20" stroke-linecap="round" />
+                            
+                            <!-- Left Spear Tip -->
+                            <polygon points="110,100 90,180 130,180" fill="url(#logoGrad)" />
+                            
+                            <!-- Right Spear Tip -->
+                            <polygon points="290,100 270,180 310,180" fill="url(#logoGrad)" />
+                            
+                            <!-- Damaru (Small Drum in Center) -->
+                            <polygon points="180,240 220,240 180,280 220,280" fill="#fff" opacity="0.9" />
+                        </g>
+                    </svg>
+                </div>
             </div>
 
-            <!-- Main Heading -->
-            <h1 class="text-4xl md:text-5xl font-extrabold text-center tracking-tight mb-1">
-                MAHADEV <br class="md:hidden">
-                <span class="text-brandYellow">MATKA</span>
+            <!-- Name Title -->
+            <h1 class="text-3xl md:text-[34px] font-extrabold text-center mb-7 name-text uppercase">
+                MAHADEV MATKA
             </h1>
-            <p class="text-textMuted text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-8 text-center">
-                India's No.1 Matka App
-            </p>
 
-            <!-- 🔴 APK DOWNLOAD BUTTON 🔴 -->
-            <a href="https://d1yei2z3i6k35z.cloudfront.net/17571087/6a312b119368a8.66012696_mahadev.apk" download class="w-full max-w-md bg-gradient-to-r from-[#f0ff44] to-[#ccff00] text-black font-extrabold py-4 px-8 rounded-xl text-lg hover:scale-105 transition-transform duration-300 shadow-glow-yellow mb-4 uppercase tracking-wide text-center flex justify-center items-center gap-3">
-                <i class="fa-solid fa-download text-xl"></i> DOWNLOAD APK
+            <!-- Top CTA Button (Changed from button to native link for 100% fail-proof redirect) -->
+            <a href="https://t.me/+FGanIlgNzGYzMDA1" target="_blank" rel="noopener noreferrer" id="secure-btn-top" aria-label="Join Telegram Now" class="cta-button w-full py-[16px] rounded-2xl text-[#1a0f00] font-extrabold text-lg md:text-xl uppercase cursor-pointer group mb-10">
+                <svg class="w-6 h-6 cta-icon drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.664 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                <span class="tracking-[0.12em] transition-all duration-300 drop-shadow-md">JOIN TELEGRAM NOW</span>
+            </a>
+
+            <!-- Features List - Updated for Matka context -->
+            <div class="w-full flex flex-col mb-10">
+                <div class="feature-item w-full py-4 px-5 rounded-lg flex items-center cursor-default">
+                    <span class="mr-4 text-xl feature-icon-dot">&bull;</span>
+                    <span class="text-gray-100 font-medium text-[15px] md:text-base tracking-wide">Daily VIP Guessing & Fix Game</span>
+                </div>
+                <div class="feature-item w-full py-4 px-5 rounded-lg flex items-center cursor-default">
+                    <span class="mr-4 text-xl feature-icon-dot">&bull;</span>
+                    <span class="text-gray-100 font-medium text-[15px] md:text-base tracking-wide">Fastest Live Results Updates</span>
+                </div>
+                <div class="feature-item w-full py-4 px-5 rounded-lg flex items-center cursor-default">
+                    <span class="mr-4 text-xl feature-icon-dot">&bull;</span>
+                    <span class="text-gray-100 font-medium text-[15px] md:text-base tracking-wide">Expert Backed Predictions</span>
+                </div>
+                <div class="feature-item w-full py-4 px-5 rounded-lg flex items-center cursor-default">
+                    <span class="mr-4 text-xl feature-icon-dot">&bull;</span>
+                    <span class="text-gray-100 font-medium text-[15px] md:text-base tracking-wide">Trusted by 50,000+ Members</span>
+                </div>
+            </div>
+
+            <!-- Bottom CTA Button (Changed from button to native link) -->
+            <a href="https://t.me/+FGanIlgNzGYzMDA1" target="_blank" rel="noopener noreferrer" id="secure-btn-bottom" aria-label="Join Telegram Now" class="cta-button w-full py-[18px] rounded-2xl text-[#1a0f00] font-extrabold text-lg md:text-xl uppercase cursor-pointer group mb-14">
+                <svg class="w-7 h-7 cta-icon drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.664 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+                <span class="tracking-[0.12em] transition-all duration-300 drop-shadow-md">JOIN TELEGRAM NOW</span>
             </a>
             
-            <p class="text-gray-400 text-sm mb-6 text-center">Trusted by 100K+ Active Users</p>
-
-            <!-- Countdown Timer -->
-            <div class="bg-black/50 border border-white/5 rounded-full px-6 py-2 mb-10 flex items-center gap-2 backdrop-blur-sm">
-                <span class="text-gray-400 text-sm font-semibold tracking-wider">ENDS IN:</span>
-                <span class="text-red-500 font-bold text-sm tracking-widest" id="countdown">14:59</span>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-3 md:gap-6 w-full max-w-2xl mb-8">
-                <!-- Card 1 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-solid fa-check text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">100%</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Accuracy</p>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-regular fa-star text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">100K+</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Members</p>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-cardBg border border-cardBorder rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center transition-colors hover:border-brandYellow/50">
-                    <i class="fa-solid fa-gem text-brandYellow text-xl md:text-2xl mb-2"></i>
-                    <h3 class="text-white font-bold text-lg md:text-xl">24/7</h3>
-                    <p class="text-gray-500 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Support</p>
-                </div>
-            </div>
-
-            <!-- Trust Badges -->
-            <div class="flex items-center justify-center gap-4 md:gap-8 text-sm text-gray-400">
-                <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brandYellow"></i> Verified</div>
-                <span class="text-gray-700">•</span>
-                <div>Secure</div>
-                <span class="text-gray-700">•</span>
-                <div class="flex items-center gap-2"><i class="fa-solid fa-bolt text-brandYellow"></i> Instant</div>
-            </div>
-
         </div>
+
+        <footer class="w-full flex flex-col items-center mt-auto">
+            
+            <!-- Modern Line Art Logo for Footer (Simplified Trishul) -->
+            <a href="#" aria-label="Home" class="footer-logo mb-5">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20,5 L20,35 M12,15 C12,25 28,25 28,15 M12,15 L12,10 M28,15 L28,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </a>
+
+            <p class="text-gray-500 text-xs md:text-sm font-semibold tracking-[0.2em] mb-8">
+                &copy; 2026 &bull; MAHADEV MATKA
+            </p>
+
+            <div class="w-16 border-t border-gray-700/50 mb-6"></div>
+
+            <div class="flex justify-center space-x-6 mb-8 text-sm font-medium">
+                <a href="#" rel="nofollow" class="footer-link">Privacy Policy</a>
+                <a href="#" rel="nofollow" class="footer-link">Terms of Service</a>
+            </div>
+
+            <p class="text-[#666666] text-[10px] md:text-[11px] text-center leading-relaxed max-w-[95%] pb-2">
+                Disclaimer: This website is not part of the Facebook website or Meta Platforms, Inc. Additionally, this site is not endorsed by Facebook in any way. FACEBOOK is a trademark of META Platforms, Inc.
+            </p>
+
+        </footer>
+
     </div>
 
-    <!-- Countdown Script -->
     <script>
-        // Set an initial time of 15 minutes
-        let timeInSeconds = 15 * 60; 
-        const countdownEl = document.getElementById('countdown');
-
-        function updateCountdown() {
-            const minutes = Math.floor(timeInSeconds / 60);
-            let seconds = timeInSeconds % 60;
-
-            seconds = seconds < 10 ? '0' + seconds : seconds;
-            let displayMinutes = minutes < 10 ? '0' + minutes : minutes;
-
-            if(countdownEl) {
-                countdownEl.innerHTML = `${displayMinutes}:${seconds}`;
+        // --- ANTI-BOT SECURITY SYSTEM (Simplified & Bulletproof) ---
+        function handleSecureClick(event) {
+            // Check for trusted human interaction.
+            // Since we are using <a> tags now, we only need to block bots.
+            // NATIVE HTML handles the redirection perfectly for real humans!
+            if (event && !event.isTrusted) {
+                console.warn("Security Alert: Automated bot click detected and blocked.");
+                event.preventDefault(); // Stop the bot from following the link
+                return false;
             }
-
-            if (timeInSeconds > 0) {
-                timeInSeconds--;
-            } else {
-                // Reset or keep at 00:00
-                timeInSeconds = 0; 
-            }
+            // Real humans will naturally follow the href link natively.
         }
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
+        // Attach listeners securely after DOM is fully parsed
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnTop = document.getElementById('secure-btn-top');
+            const btnBottom = document.getElementById('secure-btn-bottom');
+            
+            if(btnTop) btnTop.addEventListener('click', handleSecureClick);
+            if(btnBottom) btnBottom.addEventListener('click', handleSecureClick);
+        });
     </script>
 </body>
 </html>
